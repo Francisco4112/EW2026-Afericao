@@ -2,32 +2,60 @@ Persistencia de dados:
 - MongoDB.
 - Base de dados usada no exercicio 1: `autoRepair`.
 - Colecao usada no exercicio 1: `repairs`.
+- 5000 documentos importados.
 
 Setup da base de dados:
 - Foi utilizado MongoDB em Docker.
 - Criado um contentor com o nome mongoEW.
 - O dataset original foi adaptado, removendo o objeto exterior "reparacoes" e ficando num array JSON puro.
-- Importação realizada com:
-  docker exec -it mongoEW mongoimport -d autoRepair -c repairs --file /tmp/dataset_reparacoes_mongo.json --jsonArray --drop
-- Resultado da importação:
-  5000 documentos importados com sucesso.
-  
+- Importação realizada automaticamente durante a build via Dockerfile.mongo com mongoimport.
+- Resultado da importação: 5000 documentos com sucesso.
+
 Importacao do dataset:
-- Copia para um contentor MongoDB chamado `mongoEW`:
-  `sudo docker cp dataset_reparacoes_mongo.json mongoEW:/tmp/dataset_reparacoes_mongo.json`
-- Importacao para a base de dados e colecao pedidas no enunciado:
-  `sudo docker exec -it mongoEW mongoimport -d autoRepair -c repairs --file /tmp/dataset_reparacoes_mongo.json --jsonArray --drop`
-- Verificacao da importacao:
-  `sudo docker exec -it mongoEW mongosh autoRepair --quiet --eval 'db.repairs.countDocuments()'`
+- Localização: dataset_reparacoes.json (à raiz deste repositório)
+- Transformação: Script ex1/prepare_repairs_dataset.py converte o dataset
+- Import automático: Dockerfile.mongo executa mongoimport durante a build
+- Base de dados: autoRepair
+- Coleção: repairs
+- Verificação: docker compose exec api curl http://api:16025/repairs | jq length
 
 Queries MongoDB:
-- Ver ficheiro queries.txt.
+- Ver ficheiro queries.txt para as 5 queries solicitadas no exercício 1.2
 
-Execucao do exercicio 1:
-- A API de dados ainda nao foi implementada nesta fase.
+Execucao do exercicio 1 (API de dados):
+- Localização: ex1/api_dados/myServer_sel_proj.js
+- Porta: 16025
+- Rotas implementadas (conforme enunciado):
+  * GET /repairs - lista todos (com filtros ?ano=YYYY e ?marca=VRUM)
+  * GET /repairs/:id - detalhe de um registo
+  * GET /repairs/matriculas - lista de matrículas únicas ordenadas
+  * GET /repairs/interv - lista de intervenções únicas ordenadas por código
+  * POST /repairs - criar novo registo
+  * DELETE /repairs/:id - eliminar registo
+- Execução manual: cd ex1/api_dados && npm install && node myServer_sel_proj.js
+- Execução via Docker: docker compose up (na pasta ex1)
 
-Execucao do exercicio 2:
-- A interface ainda nao foi implementada nesta fase.
+Execucao do exercicio 2 (Interface):
+- Localização: ex2/app_interface.js
+- Porta: 16026
+- Rotas implementadas (conforme enunciado):
+  * GET / - página principal com tabela de reparações
+  * GET /:id - página de detalhe do registo
+  * GET /:marca - página com reparações da marca
+- Características: Obtém dados da API (não acesso direto à BD)
+- Execução manual: cd ex2 && npm install && node app_interface.js
+- Execução via Docker: docker compose up (na pasta ex1)
+
+Distribuição - Docker:
+- Dockerfile para API: ex1/api_dados/Dockerfile
+- Dockerfile para MongoDB: ex1/api_dados/Dockerfile.mongo
+- Dockerfile para Interface: ex2/Dockerfile
+- Docker Compose: ex1/docker-compose.yml orquestra os 3 serviços (MongoDB, API, Interface)
+- Execução: cd ex1 && docker compose up --build
+- Parar: docker compose down
 
 Notas adicionais:
-- O ficheiro `dataset_reparacoes_mongo.json` e o dataset final usado no exercicio 1.
+- O ficheiro dataset_reparacoes.json é o dataset base fornecido
+- Todas as rotas foram testadas e estão funcionais
+- A interface comunica com a API via HTTP (não acesso direto ao MongoDB)
+- Sistema testado em Docker Compose e pronto para distribuição

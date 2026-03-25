@@ -1,0 +1,16 @@
+# Exercicio 1.2
+
+# 1. Quantos automoveis foram reparados?
+# Por preencher.
+
+# 2. Quantos automoveis da marca "Cadillac" foram reparados?
+# Por preencher.
+
+# 3. Que marcas de automoveis ja apareceram na oficina?
+# Por preencher.
+
+# 4. Qual a distribuicao por tipo de reparacao?
+# Por preencher.
+
+# 5. Qual a distribuicao do numero de clientes por ano?
+# Por preencher.

@@ -1,0 +1,20 @@
+Persistencia de dados:
+- Por preencher.
+
+Setup da base de dados:
+- Por preencher.
+
+Importacao do dataset:
+- Por preencher.
+
+Queries MongoDB:
+- Ver ficheiro queries.txt.
+
+Execucao do exercicio 1:
+- Por preencher.
+
+Execucao do exercicio 2:
+- Por preencher.
+
+Notas adicionais:
+- Por preencher.

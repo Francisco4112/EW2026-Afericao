@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: ew2026_afericao_mongodb
+    environment:
+      - MONGO_INITDB_SKIP_KERNEL_CHECK=true
+    command: mongod
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./ex1/api_dados/dataset_reparacoes_mongo.json:/docker-entrypoint-initdb.d/dataset_reparacoes_mongo.json:ro
+      - ./ex1/api_dados/mongo-init/import.sh:/docker-entrypoint-initdb.d/import.sh:ro
+
+  api-dados:
+    build:
+      context: ./ex1/api_dados
+      dockerfile: Dockerfile
+    container_name: ew2026_afericao_api_dados
+    ports:
+      - "16025:16025"
+    environment:
+      - PORT=16025
+      - MONGO_URL=mongodb://mongodb:27017/autoRepair
+    depends_on:
+      - mongodb
+
+  interface:
+    build:
+      context: ./ex2
+      dockerfile: Dockerfile
+    container_name: ew2026_afericao_interface
+    ports:
+      - "16026:16026"
+    environment:
+      - PORT=16026
+      - API_URL=http://api-dados:16025/repairs
+    depends_on:
+      - api-dados

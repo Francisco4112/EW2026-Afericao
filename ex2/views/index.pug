@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  section.card
+    p
+      | API consumida:
+      code  /repairs
+    table.records
+      thead
+        tr
+          th _id
+          th Data
+          th Nome
+          th Matricula
+          th Marca
+          th Nr Intervencoes
+      tbody
+        each repair in repairs
+          tr
+            td
+              a(href=repair.detailUrl)= repair._id
+            td= repair.data
+            td= repair.nome
+            td= repair.viatura.matricula
+            td
+              a(href=repair.brandUrl)= repair.viatura.marca
+            td= repair.nr_intervencoes

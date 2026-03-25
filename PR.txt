@@ -1,20 +1,33 @@
 Persistencia de dados:
-- Por preencher.
+- MongoDB.
+- Base de dados usada no exercicio 1: `autoRepair`.
+- Colecao usada no exercicio 1: `repairs`.
 
 Setup da base de dados:
-- Por preencher.
-
+- Foi utilizado MongoDB em Docker.
+- Criado um contentor com o nome mongoEW.
+- O dataset original foi adaptado, removendo o objeto exterior "reparacoes" e ficando num array JSON puro.
+- Importação realizada com:
+  docker exec -it mongoEW mongoimport -d autoRepair -c repairs --file /tmp/dataset_reparacoes_mongo.json --jsonArray --drop
+- Resultado da importação:
+  5000 documentos importados com sucesso.
+  
 Importacao do dataset:
-- Por preencher.
+- Copia para um contentor MongoDB chamado `mongoEW`:
+  `sudo docker cp dataset_reparacoes_mongo.json mongoEW:/tmp/dataset_reparacoes_mongo.json`
+- Importacao para a base de dados e colecao pedidas no enunciado:
+  `sudo docker exec -it mongoEW mongoimport -d autoRepair -c repairs --file /tmp/dataset_reparacoes_mongo.json --jsonArray --drop`
+- Verificacao da importacao:
+  `sudo docker exec -it mongoEW mongosh autoRepair --quiet --eval 'db.repairs.countDocuments()'`
 
 Queries MongoDB:
 - Ver ficheiro queries.txt.
 
 Execucao do exercicio 1:
-- Por preencher.
+- A API de dados ainda nao foi implementada nesta fase.
 
 Execucao do exercicio 2:
-- Por preencher.
+- A interface ainda nao foi implementada nesta fase.
 
 Notas adicionais:
-- Por preencher.
+- O ficheiro `dataset_reparacoes_mongo.json` e o dataset final usado no exercicio 1.

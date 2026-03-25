@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  section.card.detail
+    h2 Registo
+    dl.detail-list
+      dt _id
+      dd= repair._id
+      dt Nome
+      dd= repair.nome
+      dt NIF
+      dd= repair.nif
+      dt Data
+      dd= repair.data
+      dt Marca
+      dd
+        a(href=`/${encodeURIComponent(repair.viatura.marca)}`)= repair.viatura.marca
+      dt Modelo
+      dd= repair.viatura.modelo
+      dt Matricula
+      dd= repair.viatura.matricula
+      dt Numero de intervencoes
+      dd= repair.nr_intervencoes
+
+    h3 Intervencoes
+    table.records
+      thead
+        tr
+          th Codigo
+          th Nome
+          th Descricao
+      tbody
+        each intervencao in repair.intervencoes
+          tr
+            td= intervencao.codigo
+            td= intervencao.nome
+            td= intervencao.descricao

@@ -1,16 +1,50 @@
 # Exercicio 1.2
 
 # 1. Quantos automoveis foram reparados?
-# Por preencher.
+db.repairs.countDocuments()
 
 # 2. Quantos automoveis da marca "Cadillac" foram reparados?
-# Por preencher.
+db.repairs.countDocuments({ "viatura.marca": "Cadillac" })
 
 # 3. Que marcas de automoveis ja apareceram na oficina?
-# Por preencher.
+db.repairs.distinct("viatura.marca").sort()
 
 # 4. Qual a distribuicao por tipo de reparacao?
-# Por preencher.
+db.repairs.aggregate([
+  { $unwind: "$intervencoes" },
+  {
+    $group: {
+      _id: {
+        codigo: "$intervencoes.codigo",
+        nome: "$intervencoes.nome",
+        descricao: "$intervencoes.descricao"
+      },
+      total: { $sum: 1 }
+    }
+  },
+  { $sort: { "_id.codigo": 1 } }
+])
 
 # 5. Qual a distribuicao do numero de clientes por ano?
-# Por preencher.
+db.repairs.aggregate([
+  {
+    $project: {
+      ano: { $substrBytes: ["$data", 0, 4] },
+      nif: "$nif"
+    }
+  },
+  {
+    $group: {
+      _id: "$ano",
+      clientes: { $addToSet: "$nif" }
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      ano: "$_id",
+      total_clientes: { $size: "$clientes" }
+    }
+  },
+  { $sort: { ano: 1 } }
+])

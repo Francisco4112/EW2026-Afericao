@@ -1,0 +1,12 @@
+{
+  "name": "interface-repairs",
+  "version": "1.0.0",
+  "main": "app_interface.js",
+  "scripts": {
+    "start": "node app_interface.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "pug": "^3.0.3"
+  }
+}
